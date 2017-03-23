@@ -12,17 +12,13 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 /**
- * 描述：
- * 作者：huangyu
- * 版本：V1.0
- * 创建时间：2017-3-23
- * 最后修改时间：2017-3-23
+ * Created by huangyu on 2017-3-23.
  */
 class BannerPagerAdapter<T> extends PagerAdapter {
 
     private Context mContext;
     private List<T> mDataList;
-    private SparseArray<View> mViews;
+    private SparseArray<View> mViews; // mViews.size() = mDataList.size() + 2
 
     BannerPagerAdapter(Context context, List<T> dataList) {
         this.mContext = context;
@@ -32,7 +28,7 @@ class BannerPagerAdapter<T> extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mDataList == null ? 0 : mDataList.size();
+        return mDataList == null ? 0 : mDataList.size() + 2;
     }
 
     @Override
@@ -49,7 +45,7 @@ class BannerPagerAdapter<T> extends PagerAdapter {
             mViews.put(position, view);
         }
 
-        T data = mDataList.get(position);
+        T data = mDataList.get(getRealPosition(position));
         Glide.with(mContext).load(data).into((ImageView) view);
 
         container.addView(view);
@@ -59,6 +55,24 @@ class BannerPagerAdapter<T> extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView(mViews.get(position));
+    }
+
+    /**
+     * 此处用于获取真实的序号，如下对应所示：
+     * a,b,c,e,f  mViews
+     * 2,0,1,2,0  mDataList
+     *
+     * @param position
+     * @return
+     */
+    private int getRealPosition(int position) {
+        if (position == 0) {
+            return mDataList.size() - 1;
+        } else if (position == getCount() - 1) {
+            return 0;
+        } else {
+            return position - 1;
+        }
     }
 
 }
