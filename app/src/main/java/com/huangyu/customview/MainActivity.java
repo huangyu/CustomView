@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.huangyu.customview.banner.BannerView;
+import com.huangyu.customview.labels_view.LabelsView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,35 @@ public class MainActivity extends AppCompatActivity {
         dataList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490263960022&di=303777ced56f439c568073b05da064a6&imgtype=0&src=http%3A%2F%2Fimg.sootuu.com%2Fvector%2F200801%2F097%2F658.jpg");
         BannerView<String> bannerView = (BannerView<String>) findViewById(R.id.banner_view);
         bannerView.setView(dataList);
+
+        LabelsView labelsView = (LabelsView) findViewById(R.id.labels_view);
+        List<String> dataList2 = new ArrayList<>();
+        dataList2.add("Android");
+        dataList2.add("iOS");
+        dataList2.add("Windows");
+        dataList2.add("Mac");
+        dataList2.add("Linux");
+        dataList2.add("Android");
+        dataList2.add("iOS");
+        dataList2.add("Windows");
+        dataList2.add("Mac");
+        dataList2.add("Linux");
+        dataList2.add("Android");
+        dataList2.add("iOS");
+        dataList2.add("Windows");
+        dataList2.add("Mac");
+        dataList2.add("Linux");
+        dataList2.add("Android");
+        dataList2.add("iOS");
+        dataList2.add("Windows");
+        dataList2.add("Mac");
+        dataList2.add("Linux");
+        dataList2.add("Android");
+        dataList2.add("iOS");
+        dataList2.add("Windows");
+        dataList2.add("Mac");
+        dataList2.add("Linux");
+        labelsView.setView(dataList2);
     }
 
 }
