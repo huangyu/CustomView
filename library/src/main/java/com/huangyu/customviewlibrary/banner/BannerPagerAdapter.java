@@ -1,13 +1,9 @@
-package com.huangyu.customview.banner;
+package com.huangyu.customviewlibrary.banner;
 
-import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -16,14 +12,14 @@ import java.util.List;
  */
 class BannerPagerAdapter<T> extends PagerAdapter {
 
-    private Context mContext;
     private List<T> mDataList;
     private SparseArray<View> mViews; // mViews.size() = mDataList.size() + 2
+    private BannerViewCreator<T> mCreater;
 
-    BannerPagerAdapter(Context context, List<T> dataList) {
-        this.mContext = context;
+    BannerPagerAdapter(List<T> dataList, BannerViewCreator<T> creator) {
         this.mDataList = dataList;
         this.mViews = new SparseArray<>();
+        this.mCreater = creator;
     }
 
     @Override
@@ -41,12 +37,13 @@ class BannerPagerAdapter<T> extends PagerAdapter {
         View view = mViews.get(position);
 
         if (view == null) {
-            view = new ImageView(mContext);
+            view = mCreater.createView();
             mViews.put(position, view);
         }
 
         T data = mDataList.get(getRealPosition(position));
-        Glide.with(mContext).load(data).into((ImageView) view);
+
+        mCreater.loadData(data, position, view);
 
         container.addView(view);
         return view;

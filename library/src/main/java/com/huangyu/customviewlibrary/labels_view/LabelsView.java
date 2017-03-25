@@ -1,4 +1,4 @@
-package com.huangyu.customview.labels_view;
+package com.huangyu.customviewlibrary.labels_view;
 
 import android.content.Context;
 import android.util.AttributeSet;

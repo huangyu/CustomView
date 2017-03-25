@@ -1,4 +1,4 @@
-package com.huangyu.customview.banner;
+package com.huangyu.customviewlibrary.banner;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -109,8 +109,8 @@ public class BannerView<T> extends FrameLayout {
         }
     }
 
-    public void setView(List<T> dataList) {
-        mAdapter = new BannerPagerAdapter<>(mContext, dataList);
+    public void setView(List<T> dataList, BannerViewCreator<T> creator) {
+        mAdapter = new BannerPagerAdapter<>(dataList, creator);
         mViewPager.setAdapter(mAdapter);
 
         // 默认滚动至第1项，0为最后一项

@@ -1,4 +1,4 @@
-package com.huangyu.customview.banner;
+package com.huangyu.customviewlibrary.banner;
 
 import android.content.Context;
 import android.view.animation.Interpolator;
