@@ -1,4 +1,4 @@
-package com.huangyu.customviewlibrary.pullloadmore_recycleview;
+package com.huangyu.customviewlibrary.refreshandload_view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -18,32 +18,38 @@ import com.huangyu.customviewlibrary.R;
  * Created by huangyu on 2017/3/25.
  */
 
-public class SwipeToRefreshView extends LinearLayout {
+public class RefreshAndLoadView extends LinearLayout {
 
-    private View mView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
     private RefreshAndLoadListener mRefreshAndLoadListener;
 
     private boolean isLoading;
+    private boolean isRefreshing;
 
-    public SwipeToRefreshView(Context context) {
+    public RefreshAndLoadView(Context context) {
         super(context);
         init(context);
     }
 
-    public SwipeToRefreshView(Context context, @Nullable AttributeSet attrs) {
+    public RefreshAndLoadView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
     private boolean isRefreshing() {
-        return mSwipeRefreshLayout.isRefreshing();
+        return isRefreshing;
     }
 
-    private void setIsRefreshing(boolean isRefreshing) {
-        mSwipeRefreshLayout.setRefreshing(isRefreshing);
+    private void setIsRefreshing(final boolean isRefreshing) {
+        this.isRefreshing = isRefreshing;
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(isRefreshing);
+            }
+        });
     }
 
     private boolean isLoading() {
@@ -59,33 +65,42 @@ public class SwipeToRefreshView extends LinearLayout {
         setIsLoading(false);
     }
 
-    public SwipeToRefreshView setRefreshAndLoadListener(RefreshAndLoadListener refreshAndLoadListener) {
+    public RefreshAndLoadView setRefreshAndLoadListener(RefreshAndLoadListener refreshAndLoadListener) {
         this.mRefreshAndLoadListener = refreshAndLoadListener;
         return this;
     }
 
-    public SwipeToRefreshView setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+    public RefreshAndLoadView setLayoutManager(RecyclerView.LayoutManager layoutManager) {
         this.mRecyclerView.setLayoutManager(layoutManager);
         return this;
     }
 
-    private void init(Context context) {
-        mView = LayoutInflater.from(context).inflate(R.layout.layout_pull_load_more, null);
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_refresh_layout);
+    public RefreshAndLoadView setAdapter(RecyclerView.Adapter adapter) {
+        this.mRecyclerView.setAdapter(adapter);
+        return this;
+    }
 
+    public void startRefresh() {
+        setIsRefreshing(true);
+        if (mRefreshAndLoadListener != null) {
+            mRefreshAndLoadListener.onRefresh();
+        }
+    }
+
+    private void init(Context context) {
+        View mView = LayoutInflater.from(context).inflate(R.layout.layout_pull_load_more, this);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_dark, android.R.color.holo_blue_dark, android.R.color.holo_red_dark, android.R.color.holo_orange_dark);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!isRefreshing() && !isLoading()) {
-                    setIsRefreshing(true);
-                    if (mRefreshAndLoadListener != null) {
-                        mRefreshAndLoadListener.onRefresh();
-                    }
+                if (!isRefreshing()) {
+                    startRefresh();
                 }
             }
         });
 
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -123,23 +138,20 @@ public class SwipeToRefreshView extends LinearLayout {
                     }
                 }
 
-                // refresh
                 if (firstItem == 0 || firstItem == RecyclerView.NO_POSITION) {
                     mSwipeRefreshLayout.setEnabled(true);
                 } else {
                     mSwipeRefreshLayout.setEnabled(false);
                 }
 
-                // load
                 if (!isRefreshing() && !isLoading()
                         && (lastItem == totalItemCount - 1)
                         && (dx > 0 || dy > 0)) {
-                    isLoading = true;
+                    setIsLoading(true);
                     if (mRefreshAndLoadListener != null) {
                         mRefreshAndLoadListener.onLoad();
                     }
                 }
-
             }
         });
     }

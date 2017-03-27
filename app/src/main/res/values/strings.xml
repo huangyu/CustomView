@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CustomView</string>
+    <string name="banner_view">BannerView</string>
+    <string name="labels_view">LabelsView</string>
+    <string name="canvas_view">CanvasView</string>
+    <string name="refresh_and_load_more_view">RefreshAndLoadView</string>
 </resources>

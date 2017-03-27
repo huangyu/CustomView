@@ -1,4 +1,4 @@
-package com.huangyu.customviewlibrary.pullloadmore_recycleview;
+package com.huangyu.customviewlibrary.refreshandload_view;
 
 /**
  * Created by huangyu on 2017/3/26.
