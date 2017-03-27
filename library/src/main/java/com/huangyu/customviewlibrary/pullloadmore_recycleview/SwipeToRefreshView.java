@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 
 import com.huangyu.customviewlibrary.R;
 
-import static android.R.attr.max;
-
 /**
  * Created by huangyu on 2017/3/25.
  */
@@ -28,8 +26,6 @@ public class SwipeToRefreshView extends LinearLayout {
 
     private RefreshAndLoadListener mRefreshAndLoadListener;
 
-    private boolean isCanRefresh = true;
-    private boolean isCanLoad = true;
     private boolean isLoading;
 
     public SwipeToRefreshView(Context context) {
@@ -42,14 +38,25 @@ public class SwipeToRefreshView extends LinearLayout {
         init(context);
     }
 
-    public SwipeToRefreshView setIsCanRefresh(boolean isCanRefresh) {
-        this.isCanRefresh = isCanRefresh;
-        return this;
+    private boolean isRefreshing() {
+        return mSwipeRefreshLayout.isRefreshing();
     }
 
-    public SwipeToRefreshView setIsCanoad(boolean isCanLoad) {
-        this.isCanLoad = isCanLoad;
-        return this;
+    private void setIsRefreshing(boolean isRefreshing) {
+        mSwipeRefreshLayout.setRefreshing(isRefreshing);
+    }
+
+    private boolean isLoading() {
+        return isLoading;
+    }
+
+    private void setIsLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+    }
+
+    public void setComplete() {
+        setIsRefreshing(false);
+        setIsLoading(false);
     }
 
     public SwipeToRefreshView setRefreshAndLoadListener(RefreshAndLoadListener refreshAndLoadListener) {
@@ -70,7 +77,7 @@ public class SwipeToRefreshView extends LinearLayout {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!isCanRefresh && isRefreshing()) {
+                if (!isRefreshing() && !isLoading()) {
                     setIsRefreshing(true);
                     if (mRefreshAndLoadListener != null) {
                         mRefreshAndLoadListener.onRefresh();
@@ -118,18 +125,14 @@ public class SwipeToRefreshView extends LinearLayout {
 
                 // refresh
                 if (firstItem == 0 || firstItem == RecyclerView.NO_POSITION) {
-                    if (isCanRefresh) {
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
+                    mSwipeRefreshLayout.setEnabled(true);
                 } else {
                     mSwipeRefreshLayout.setEnabled(false);
                 }
 
                 // load
-                if (isCanLoad
-                        && !mSwipeRefreshLayout.isRefreshing()
+                if (!isRefreshing() && !isLoading()
                         && (lastItem == totalItemCount - 1)
-                        && !isLoading
                         && (dx > 0 || dy > 0)) {
                     isLoading = true;
                     if (mRefreshAndLoadListener != null) {
@@ -139,37 +142,6 @@ public class SwipeToRefreshView extends LinearLayout {
 
             }
         });
-    }
-
-    private int findMax(int[] lastPositions) {
-        int max = lastPositions[0];
-        for (int value : lastPositions) {
-            if (value > max) {
-                max = value;
-            }
-        }
-        return max;
-    }
-
-    public boolean isRefreshing() {
-        return mSwipeRefreshLayout.isRefreshing();
-    }
-
-    public void setIsRefreshing(boolean isRefreshing) {
-        mSwipeRefreshLayout.setRefreshing(isRefreshing);
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setIsLoading(boolean isLoading) {
-        this.isLoading = isLoading;
-    }
-
-    public void setComplete() {
-        setIsRefreshing(false);
-        setIsLoading(false);
     }
 
 }
