@@ -84,11 +84,14 @@ public class MainActivity extends AppCompatActivity {
 //        labelsView.setView(dataList2);
     }
 
-    private void loadData() {
+    private void loadData(final boolean isRefresh) {
         refreshAndLoadView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (adapter != null) {
+                    if(isRefresh) {
+                        adapter.clearData();
+                    }
                     adapter.addData(mGroupSize, mGroupCount);
                     adapter.notifyDataSetChanged();
                 }
@@ -97,21 +100,14 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void clearData() {
-        if (adapter != null) {
-            adapter.clearData();
-        }
-    }
-
     private void refresh() {
         mGroupCount = 1;
-        clearData();
-        loadData();
+        loadData(true);
     }
 
     private void load() {
         mGroupCount++;
-        loadData();
+        loadData(false);
     }
 
 }

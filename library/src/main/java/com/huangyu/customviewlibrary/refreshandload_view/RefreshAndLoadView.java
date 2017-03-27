@@ -1,5 +1,7 @@
 package com.huangyu.customviewlibrary.refreshandload_view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +12,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
 import com.huangyu.customviewlibrary.R;
@@ -22,6 +25,7 @@ public class RefreshAndLoadView extends LinearLayout {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
+    private View mFootView;
 
     private RefreshAndLoadListener mRefreshAndLoadListener;
 
@@ -60,11 +64,6 @@ public class RefreshAndLoadView extends LinearLayout {
         this.isLoading = isLoading;
     }
 
-    public void setComplete() {
-        setIsRefreshing(false);
-        setIsLoading(false);
-    }
-
     public RefreshAndLoadView setRefreshAndLoadListener(RefreshAndLoadListener refreshAndLoadListener) {
         this.mRefreshAndLoadListener = refreshAndLoadListener;
         return this;
@@ -80,10 +79,49 @@ public class RefreshAndLoadView extends LinearLayout {
         return this;
     }
 
+    public void setComplete() {
+        if (isLoading()) {
+            mFootView.animate()
+                    .translationY(mFootView.getHeight())
+                    .setDuration(250)
+                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            mFootView.setVisibility(View.GONE);
+                        }
+                    })
+                    .start();
+            invalidate();
+        }
+
+        setIsRefreshing(false);
+        setIsLoading(false);
+    }
+
     public void startRefresh() {
         setIsRefreshing(true);
         if (mRefreshAndLoadListener != null) {
             mRefreshAndLoadListener.onRefresh();
+        }
+    }
+
+    public void startLoad() {
+        setIsLoading(true);
+        if (mRefreshAndLoadListener != null) {
+            mFootView.animate()
+                    .translationY(0)
+                    .setDuration(250)
+                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            mFootView.setVisibility(View.VISIBLE);
+                        }
+                    })
+                    .start();
+            invalidate();
+            mRefreshAndLoadListener.onLoad();
         }
     }
 
@@ -94,7 +132,7 @@ public class RefreshAndLoadView extends LinearLayout {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!isRefreshing()) {
+                if (!isRefreshing() && !isLoading()) {
                     startRefresh();
                 }
             }
@@ -106,21 +144,18 @@ public class RefreshAndLoadView extends LinearLayout {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int lastItem = 0;
-                int firstItem = 0;
 
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 int totalItemCount = layoutManager.getItemCount();
 
                 if (layoutManager instanceof GridLayoutManager) {
                     GridLayoutManager gridLayoutManager = ((GridLayoutManager) layoutManager);
-                    firstItem = gridLayoutManager.findFirstCompletelyVisibleItemPosition();
                     lastItem = gridLayoutManager.findLastCompletelyVisibleItemPosition();
                     if (lastItem == -1) {
                         lastItem = gridLayoutManager.findLastVisibleItemPosition();
                     }
                 } else if (layoutManager instanceof LinearLayoutManager) {
                     LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) layoutManager);
-                    firstItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
                     lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
                     if (lastItem == -1) {
                         lastItem = linearLayoutManager.findLastVisibleItemPosition();
@@ -129,7 +164,6 @@ public class RefreshAndLoadView extends LinearLayout {
                     StaggeredGridLayoutManager staggeredGridLayoutManager = ((StaggeredGridLayoutManager) layoutManager);
                     int[] lastPositions = new int[((StaggeredGridLayoutManager) layoutManager).getSpanCount()];
                     staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(lastPositions);
-                    firstItem = staggeredGridLayoutManager.findFirstVisibleItemPositions(lastPositions)[0];
                     lastItem = lastPositions[0];
                     for (int value : lastPositions) {
                         if (value > lastItem) {
@@ -138,22 +172,15 @@ public class RefreshAndLoadView extends LinearLayout {
                     }
                 }
 
-                if (firstItem == 0 || firstItem == RecyclerView.NO_POSITION) {
-                    mSwipeRefreshLayout.setEnabled(true);
-                } else {
-                    mSwipeRefreshLayout.setEnabled(false);
-                }
-
                 if (!isRefreshing() && !isLoading()
                         && (lastItem == totalItemCount - 1)
                         && (dx > 0 || dy > 0)) {
-                    setIsLoading(true);
-                    if (mRefreshAndLoadListener != null) {
-                        mRefreshAndLoadListener.onLoad();
-                    }
+                    startLoad();
                 }
             }
         });
+        mFootView = findViewById(R.id.foot_view);
+        mFootView.setVisibility(View.GONE);
     }
 
 }
