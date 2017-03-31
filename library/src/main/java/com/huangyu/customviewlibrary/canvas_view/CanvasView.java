@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by huangyu on 2017-3-24.
@@ -25,6 +26,8 @@ public class CanvasView extends View {
     private final RectF mDirtyRect = new RectF();
     private static final float HALF_STROKE_WIDTH = 5.0f;
     private static final int DEFAULT_STROKE_WIDTH = 10;
+
+    private ViewGroup mParentViewGroup;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -62,6 +65,10 @@ public class CanvasView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.SQUARE);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+    }
+
+    public void setParentView(ViewGroup viewGroup) {
+        this.mParentViewGroup = viewGroup;
     }
 
     @Override
@@ -126,6 +133,9 @@ public class CanvasView extends View {
             float y = event.getY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (mParentViewGroup != null) {
+                        mParentViewGroup.requestDisallowInterceptTouchEvent(true);
+                    }
                     touchStart(x, y, event);
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -133,6 +143,9 @@ public class CanvasView extends View {
                     break;
                 case MotionEvent.ACTION_UP:
                     touchUp(x, y, event);
+                    if (mParentViewGroup != null) {
+                        mParentViewGroup.requestDisallowInterceptTouchEvent(false);
+                    }
                     break;
             }
             invalidate();

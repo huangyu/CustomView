@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BannerView">
+        <attr name="intervalTime" format="integer" />
+        <attr name="scrollDuration" format="integer" />
+    </declare-styleable>
+</resources>

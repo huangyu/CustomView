@@ -4,26 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.huangyu.customviewlibrary.refreshandload_view.RefreshAndLoadView
-        android:id="@+id/refresh_and_load_view"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
-    <!--<com.huangyu.customviewlibrary.labels_view.LabelsView-->
-    <!--android:id="@+id/labels_view"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:background="@drawable/canvas_border">-->
-
-    <!--<com.huangyu.customviewlibrary.canvas_view.CanvasView-->
-    <!--android:layout_width="200dp"-->
-    <!--android:layout_height="200dp"-->
-    <!--android:background="@android:color/white" />-->
-    <!--</LinearLayout>-->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>
