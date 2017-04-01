@@ -4,4 +4,11 @@
         <attr name="intervalTime" format="integer" />
         <attr name="scrollDuration" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="LabelsView">
+        <attr name="childMargin" format="integer" />
+        <attr name="lineMargin" format="integer" />
+        <attr name="textSize" format="integer" />
+        <attr name="padding" format="integer" />
+    </declare-styleable>
 </resources>

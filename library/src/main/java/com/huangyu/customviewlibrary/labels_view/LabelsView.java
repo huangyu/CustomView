@@ -1,10 +1,13 @@
 package com.huangyu.customviewlibrary.labels_view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.huangyu.customviewlibrary.R;
 
 import java.util.List;
 
@@ -16,9 +19,9 @@ public class LabelsView extends ViewGroup {
     private Context mContext;
 
     private int mChildMargin = 20; // 行间距
-    private int mLineMargin = 20; // 单行间子元素间距
+    private int mLineMargin = 20; // 单行间间距
     private int mTextSize = 20; // 文字大小
-    private int mPadding = 10;
+    private int mPadding = 10; // 子元素间距
 
     public LabelsView(Context context) {
         super(context);
@@ -27,6 +30,7 @@ public class LabelsView extends ViewGroup {
 
     public LabelsView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        getAttribute(context, attrs);
         this.mContext = context;
     }
 
@@ -130,7 +134,18 @@ public class LabelsView extends ViewGroup {
             x = x + mChildMargin + childView.getMeasuredWidth();
             childMaxHeight = Math.max(childMaxHeight, childView.getMeasuredHeight());
         }
+    }
 
+    private void getAttribute(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LabelsView);
+        try {
+            mChildMargin = a.getInteger(R.styleable.LabelsView_childMargin, 4000);
+            mLineMargin = a.getInteger(R.styleable.LabelsView_lineMargin, 250);
+            mPadding = a.getInteger(R.styleable.LabelsView_padding, 250);
+            mTextSize = a.getInteger(R.styleable.LabelsView_textSize, 250);
+        } finally {
+            a.recycle();
+        }
     }
 
 }
