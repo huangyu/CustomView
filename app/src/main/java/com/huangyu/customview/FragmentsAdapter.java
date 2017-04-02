@@ -13,7 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class FragmentsAdapter extends FragmentPagerAdapter {
 
-    private String mTabTitles[] = new String[]{"Banner", "Canvas", "Labels", "RefreshAndLoad"};
+    private String mTabTitles[] = new String[]{"Banner", "Canvas", "Labels", "RAndL"};
 
     private Fragment bannerFragment;
     private Fragment labelsFragment;

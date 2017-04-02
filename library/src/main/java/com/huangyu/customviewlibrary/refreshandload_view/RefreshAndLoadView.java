@@ -1,7 +1,5 @@
 package com.huangyu.customviewlibrary.refreshandload_view;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +10,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
 import com.huangyu.customviewlibrary.R;
@@ -25,7 +22,6 @@ public class RefreshAndLoadView extends LinearLayout {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private View mFootView;
 
     private RefreshAndLoadListener mRefreshAndLoadListener;
 
@@ -80,23 +76,6 @@ public class RefreshAndLoadView extends LinearLayout {
     }
 
     public void setComplete() {
-        if (isLoading()) {
-            mFootView.animate()
-                    .translationY(mFootView.getHeight())
-                    .setDuration(250)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            mFootView.setVisibility(View.GONE);
-                        }
-                    })
-                    .start();
-            mRecyclerView.animate().translationY(mFootView.getHeight()).setDuration(250).setInterpolator(new AccelerateDecelerateInterpolator());
-
-            invalidate();
-        }
-
         setIsRefreshing(false);
         setIsLoading(false);
     }
@@ -111,19 +90,6 @@ public class RefreshAndLoadView extends LinearLayout {
     public void startLoad() {
         setIsLoading(true);
         if (mRefreshAndLoadListener != null) {
-            mFootView.animate()
-                    .translationY(-mFootView.getHeight())
-                    .setDuration(250)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            mFootView.setVisibility(View.VISIBLE);
-                        }
-                    })
-                    .start();
-            mRecyclerView.animate().translationY(-mFootView.getHeight()).setDuration(250).setInterpolator(new AccelerateDecelerateInterpolator());
-            invalidate();
             mRefreshAndLoadListener.onLoad();
         }
     }
@@ -182,8 +148,6 @@ public class RefreshAndLoadView extends LinearLayout {
                 }
             }
         });
-        mFootView = findViewById(R.id.foot_view);
-        mFootView.setVisibility(View.GONE);
     }
 
 }

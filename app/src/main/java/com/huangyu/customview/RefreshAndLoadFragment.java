@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.huangyu.customviewlibrary.refreshandload_view.RecyclerViewAdapter;
 import com.huangyu.customviewlibrary.refreshandload_view.RefreshAndLoadListener;
 import com.huangyu.customviewlibrary.refreshandload_view.RefreshAndLoadView;
 
