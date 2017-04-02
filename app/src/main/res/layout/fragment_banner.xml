@@ -7,8 +7,6 @@
     <com.huangyu.customviewlibrary.banner.BannerView
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:intervalTime="3000"
-        app:scrollDuration="300"/>
+        android:layout_height="200dp" />
 
 </android.support.constraint.ConstraintLayout>

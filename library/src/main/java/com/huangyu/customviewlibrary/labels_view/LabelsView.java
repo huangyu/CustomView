@@ -2,6 +2,9 @@ package com.huangyu.customviewlibrary.labels_view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,10 @@ public class LabelsView extends ViewGroup {
     private int mTextSize = 20; // 文字大小
     private int mPadding = 10; // 子元素间距
 
+    private int mRoundRadius = 15; // 圆角半径
+    private int mStrokeWidth = 2; // 边框宽度
+    private int mStrokeColor = Color.BLUE;//边框颜色
+
     public LabelsView(Context context) {
         super(context);
         this.mContext = context;
@@ -43,6 +50,17 @@ public class LabelsView extends ViewGroup {
             TextView textView = new TextView(mContext);
             textView.setText(data);
             textView.setTextSize(mTextSize);
+            textView.setTextColor(mStrokeColor);
+            textView.setPadding(15, 15, 15, 15);
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setCornerRadius(mRoundRadius);
+            gradientDrawable.setStroke(mStrokeWidth, mStrokeColor);
+//            textView.setBackgroundResource(R.drawable.shape_labels);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                textView.setBackground(gradientDrawable);
+            } else {
+                textView.setBackgroundDrawable(gradientDrawable);
+            }
             this.addView(textView);
         }
         setPadding(mPadding, mPadding, mPadding, mPadding);
@@ -139,10 +157,13 @@ public class LabelsView extends ViewGroup {
     private void getAttribute(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LabelsView);
         try {
-            mChildMargin = a.getInteger(R.styleable.LabelsView_childMargin, 4000);
-            mLineMargin = a.getInteger(R.styleable.LabelsView_lineMargin, 250);
-            mPadding = a.getInteger(R.styleable.LabelsView_padding, 250);
-            mTextSize = a.getInteger(R.styleable.LabelsView_textSize, 250);
+            mChildMargin = a.getInteger(R.styleable.LabelsView_childMargin, 20);
+            mLineMargin = a.getInteger(R.styleable.LabelsView_lineMargin, 20);
+            mTextSize = a.getInteger(R.styleable.LabelsView_textSize, 20);
+            mPadding = a.getInteger(R.styleable.LabelsView_padding, 10);
+            mRoundRadius = a.getInteger(R.styleable.LabelsView_padding, 15);
+            mStrokeWidth = a.getInteger(R.styleable.LabelsView_padding, 2);
+            mStrokeColor = a.getInteger(R.styleable.LabelsView_padding, Color.BLUE);
         } finally {
             a.recycle();
         }

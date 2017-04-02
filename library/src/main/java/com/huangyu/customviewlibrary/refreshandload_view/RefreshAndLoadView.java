@@ -92,6 +92,8 @@ public class RefreshAndLoadView extends LinearLayout {
                         }
                     })
                     .start();
+            mRecyclerView.animate().translationY(mFootView.getHeight()).setDuration(250).setInterpolator(new AccelerateDecelerateInterpolator());
+
             invalidate();
         }
 
@@ -110,7 +112,7 @@ public class RefreshAndLoadView extends LinearLayout {
         setIsLoading(true);
         if (mRefreshAndLoadListener != null) {
             mFootView.animate()
-                    .translationY(0)
+                    .translationY(-mFootView.getHeight())
                     .setDuration(250)
                     .setInterpolator(new AccelerateDecelerateInterpolator())
                     .setListener(new AnimatorListenerAdapter() {
@@ -120,6 +122,7 @@ public class RefreshAndLoadView extends LinearLayout {
                         }
                     })
                     .start();
+            mRecyclerView.animate().translationY(-mFootView.getHeight()).setDuration(250).setInterpolator(new AccelerateDecelerateInterpolator());
             invalidate();
             mRefreshAndLoadListener.onLoad();
         }
