@@ -15,14 +15,14 @@ import java.util.List;
 /**
  * Created by huangyu on 2017-3-27.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RefreshAndLoadViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
     public List<String> mDataList;
 
-    public RecyclerViewAdapter() {
+    public RefreshAndLoadViewAdapter() {
         this.mDataList = new ArrayList<>();
     }
 

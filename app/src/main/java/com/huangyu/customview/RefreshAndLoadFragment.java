@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.huangyu.customviewlibrary.refreshandload_view.RecyclerViewAdapter;
+import com.huangyu.customviewlibrary.refreshandload_view.RefreshAndLoadViewAdapter;
 import com.huangyu.customviewlibrary.refreshandload_view.RefreshAndLoadListener;
 import com.huangyu.customviewlibrary.refreshandload_view.RefreshAndLoadView;
 
@@ -21,13 +21,13 @@ public class RefreshAndLoadFragment extends Fragment {
     private int mGroupSize = 10;
 
     private RefreshAndLoadView refreshAndLoadView;
-    private RecyclerViewAdapter adapter;
+    private RefreshAndLoadViewAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_refreshandload, container, false);
-        adapter = new RecyclerViewAdapter();
+        adapter = new RefreshAndLoadViewAdapter();
         refreshAndLoadView = (RefreshAndLoadView) view.findViewById(R.id.refresh_and_load_view);
         refreshAndLoadView.setLayoutManager(new LinearLayoutManager(getActivity())).setAdapter(adapter).setRefreshAndLoadListener(new RefreshAndLoadListener() {
             @Override
