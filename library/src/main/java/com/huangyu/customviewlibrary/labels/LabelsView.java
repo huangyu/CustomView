@@ -1,4 +1,4 @@
-package com.huangyu.customviewlibrary.labels_view;
+package com.huangyu.customviewlibrary.labels;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,4 +1,4 @@
-package com.huangyu.customviewlibrary.canvas_view;
+package com.huangyu.customviewlibrary.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;

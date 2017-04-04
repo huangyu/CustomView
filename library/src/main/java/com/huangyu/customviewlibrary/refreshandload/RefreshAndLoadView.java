@@ -1,4 +1,4 @@
-package com.huangyu.customviewlibrary.refreshandload_view;
+package com.huangyu.customviewlibrary.refreshandload;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

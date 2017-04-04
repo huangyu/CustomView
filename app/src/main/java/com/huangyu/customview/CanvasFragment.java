@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.huangyu.customviewlibrary.canvas_view.CanvasView;
+import com.huangyu.customviewlibrary.canvas.CanvasView;
 
 /**
  * Created by huangyu on 2017-3-31.
