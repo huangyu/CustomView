@@ -20,8 +20,8 @@ public class SectorView extends View {
     private static final int mSelectColor = Color.parseColor("#EE6DCFF6");
     private static final int mLineColor = Color.WHITE;
     private static final int mTextSize = (int) (16 * Utils.getScreenDensity());
-    private static final int mStrokeWidth = 1;
-    private static final int mStrokeAlpha = 76;
+    private static final int mStrokeWidth = 2;
+    private static final int mStrokeAlpha = 80;
 
     private int mTotalAngle;
     private int mSectorAngle;
@@ -103,7 +103,7 @@ public class SectorView extends View {
 
         // 画文字
         double textPositionX = getTextPositionX(mRadius * 5 / 7, mPosition, mTotalAngle / mSectorAngle);
-        double textPositionY = getTextPositionY(mRadius * 5 / 7, mPosition, mTotalAngle / mSectorAngle);
+        double textPositionY = getTextPositionY(mRadius * 5 / 7, mPosition, mTotalAngle / mSectorAngle) + mTextSize / 2;
 
         if (!TextUtils.isEmpty(mText)) {
             drawText(canvas, mText, textPositionX, textPositionY);

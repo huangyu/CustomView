@@ -22,18 +22,18 @@ public class SectorMenuView extends FrameLayout {
     private static final int mTotalAngle = 360; // 总角度
     private static final int mIntervalTime = 10; // 切换时间
 
+    private int mBackgroundRes; // 中心图片
     private int mDiameter; // 直径
     private int mSectorAngle; // 每个扇形角度
-    private int mBackgroundRes; // 中心图片
 
     private boolean isOpen = false;
-    private boolean canTouch = true;
-    private int selectPosition = -1;
+    private boolean isCanTouch = true;
+    private int mSelectPosition = -1;
 
-    private String[] textArray;
-    private SectorView[] sectorViewArray;
-    private CenterView centerView;
-    private SectorButtonClickListener sectorButtonClickListener;
+    private String[] mTextArray;
+    private SectorView[] mSectorViewArray;
+    private CenterView mCenterView;
+    private SectorButtonClickListener mSectorButtonClickListener;
 
     public interface SectorButtonClickListener {
         void onSectorButtonClick(int position, String text);
@@ -45,31 +45,31 @@ public class SectorMenuView extends FrameLayout {
     }
 
     public void setOnSectorButtonClick(SectorButtonClickListener sectorButtonClickListener) {
-        this.sectorButtonClickListener = sectorButtonClickListener;
+        this.mSectorButtonClickListener = sectorButtonClickListener;
     }
 
     public void init(final Context context, String[] textArray) {
-        centerView = new CenterView(context);
-        centerView.setBitmapResourse(mBackgroundRes);
-        addView(centerView);
+        mCenterView = new CenterView(context);
+        mCenterView.setBitmapResourse(mBackgroundRes);
+        addView(mCenterView);
 
-        this.textArray = textArray;
-        sectorViewArray = new SectorView[textArray.length];
+        this.mTextArray = textArray;
+        mSectorViewArray = new SectorView[textArray.length];
         SectorView sectorView;
-        for (int i = 0; i < sectorViewArray.length; i++) {
+        for (int i = 0; i < mSectorViewArray.length; i++) {
             sectorView = new SectorView(context, textArray[i], i, mTotalAngle, mSectorAngle);
             sectorView.setVisibility(View.INVISIBLE);
-            sectorViewArray[i] = sectorView;
+            mSectorViewArray[i] = sectorView;
             addView(sectorView);
         }
 
-        bringChildToFront(centerView);
+        bringChildToFront(mCenterView);
     }
 
     public void openOrCloseMenu(boolean isShowDialog) {
         Animation animation = getCenterAnim(isShowDialog);
         if (animation != null) {
-            centerView.startAnimation(animation);
+            mCenterView.startAnimation(animation);
         }
     }
 
@@ -89,8 +89,8 @@ public class SectorMenuView extends FrameLayout {
             @Override
             public void onAnimationStart(Animation animation) {
                 if (!isOpen) {
-                    centerView.setBitmapResourse(R.drawable.btn_tool_hover);
-                    centerView.invalidate();
+                    mCenterView.setBitmapResourse(R.drawable.btn_tool_hover);
+                    mCenterView.invalidate();
                 }
                 startSectorAnim();
             }
@@ -98,8 +98,8 @@ public class SectorMenuView extends FrameLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (isOpen) {
-                    centerView.setBitmapResourse(R.drawable.btn_tool_nor);
-                    centerView.invalidate();
+                    mCenterView.setBitmapResourse(R.drawable.btn_tool_nor);
+                    mCenterView.invalidate();
                 }
             }
 
@@ -108,17 +108,17 @@ public class SectorMenuView extends FrameLayout {
 
             }
         });
-        animation.setDuration(mIntervalTime * sectorViewArray.length);
+        animation.setDuration(mIntervalTime * mSectorViewArray.length);
         return animation;
     }
 
     private void startSectorAnim() {
-        int length = sectorViewArray.length;
+        int length = mSectorViewArray.length;
         if (length > 0) {
             if (isOpen) {
-                sectorViewArray[length - 1].startAnimation(getSectorAnim(length - 1));
+                mSectorViewArray[length - 1].startAnimation(getSectorAnim(length - 1));
             } else {
-                sectorViewArray[0].startAnimation(getSectorAnim(0));
+                mSectorViewArray[0].startAnimation(getSectorAnim(0));
             }
         }
     }
@@ -141,24 +141,24 @@ public class SectorMenuView extends FrameLayout {
             public void onAnimationEnd(Animation animation) {
                 int newPosition;
                 if (isOpen) {
-                    sectorViewArray[position].setVisibility(View.GONE);
+                    mSectorViewArray[position].setVisibility(View.GONE);
 
                     newPosition = position - 1;
                     if (newPosition >= 0) {
-                        sectorViewArray[newPosition].startAnimation(getSectorAnim(newPosition));
+                        mSectorViewArray[newPosition].startAnimation(getSectorAnim(newPosition));
                     } else {
                         isOpen = !isOpen;
-                        canTouch = true;
+                        isCanTouch = true;
                     }
                 } else {
-                    sectorViewArray[position].setVisibility(View.VISIBLE);
+                    mSectorViewArray[position].setVisibility(View.VISIBLE);
 
                     newPosition = position + 1;
-                    if (newPosition < sectorViewArray.length) {
-                        sectorViewArray[newPosition].startAnimation(getSectorAnim(newPosition));
+                    if (newPosition < mSectorViewArray.length) {
+                        mSectorViewArray[newPosition].startAnimation(getSectorAnim(newPosition));
                     } else {
                         isOpen = !isOpen;
-                        canTouch = true;
+                        isCanTouch = true;
                     }
                 }
             }
@@ -176,12 +176,12 @@ public class SectorMenuView extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (!canTouch) {
+                if (!isCanTouch) {
                     return true;
                 }
-                canTouch = false;
-                selectPosition = touchJudge(event.getX(), event.getY());
-                switch (selectPosition) {
+                isCanTouch = false;
+                mSelectPosition = touchJudge(event.getX(), event.getY());
+                switch (mSelectPosition) {
                     // 选中中心
                     case -1:
                         openOrCloseMenu(false);
@@ -189,13 +189,13 @@ public class SectorMenuView extends FrameLayout {
                         break;
                     // 没有选中
                     case -2:
-                        canTouch = true;
+                        isCanTouch = true;
                         break;
                     // 选中扇形
                     default:
-//						canTouch = true;
+//						isCanTouch = true;
                         selectPosition();
-                        sectorButtonClickListener.onSectorButtonClick(selectPosition, textArray[selectPosition]);
+                        mSectorButtonClickListener.onSectorButtonClick(mSelectPosition, mTextArray[mSelectPosition]);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -212,11 +212,11 @@ public class SectorMenuView extends FrameLayout {
      * 选中的扇形改变颜色
      */
     private void selectPosition() {
-        for (int i = 0; i < sectorViewArray.length; i++) {
-            if (i == selectPosition) {
-                sectorViewArray[i].setIsSelect(true);
+        for (int i = 0; i < mSectorViewArray.length; i++) {
+            if (i == mSelectPosition) {
+                mSectorViewArray[i].setIsSelect(true);
             } else {
-                sectorViewArray[i].setIsSelect(false);
+                mSectorViewArray[i].setIsSelect(false);
             }
         }
     }
@@ -230,7 +230,7 @@ public class SectorMenuView extends FrameLayout {
      */
     private int touchJudge(double touchX, double touchY) {
         // 实际按钮并没有填充全部布局，乘以一个系数避免点击冲突
-        double radius = (centerView.mBitmapWidth + centerView.mBitmapHeight) / 2 / 2 * 5 / 6;
+        double radius = (mCenterView.mBitmapWidth + mCenterView.mBitmapHeight) / 2 / 2 * 5 / 6;
 
         double x = touchX - mDiameter / 2;
         double y = touchY - mDiameter / 2;
@@ -254,7 +254,7 @@ public class SectorMenuView extends FrameLayout {
             else {
                 double angle = mTotalAngle - Math.round(Math.atan2(y, x) / Math.PI * mTotalAngle / 2);
                 angle = angle > mTotalAngle ? angle - mTotalAngle : angle;
-                for (int i = 0; i < sectorViewArray.length; i++) {
+                for (int i = 0; i < mSectorViewArray.length; i++) {
                     if (isSelect(angle, i)) {
                         return i; // 选中第i个扇形
                     }

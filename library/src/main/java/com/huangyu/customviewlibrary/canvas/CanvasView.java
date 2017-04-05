@@ -29,21 +29,10 @@ public class CanvasView extends View {
 
     private ViewGroup mParentViewGroup;
 
-    public void init() {
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setDither(true);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
-        mPath = new Path();
-    }
-
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        mPath = new Path();
+        setPaint();
     }
 
     public void clear() {
@@ -52,7 +41,18 @@ public class CanvasView extends View {
         invalidate();
     }
 
-    public void eraser() {
+    public void setPaint() {
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
+    }
+
+    public void setEraser() {
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
