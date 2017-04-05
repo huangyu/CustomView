@@ -11,4 +11,10 @@
         <attr name="textSize" format="integer" />
         <attr name="padding" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="SectorMenuView">
+        <attr name="backgroundRes" format="reference" />
+        <attr name="diameter" format="integer" />
+        <attr name="sectorAngle" format="integer" />
+    </declare-styleable>
 </resources>

@@ -9,127 +9,123 @@ import android.graphics.RectF;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.huangyu.customviewlibrary.Utils;
+
 /**
  * Created by huangyu on 2017/4/5.
  */
 public class SectorView extends View {
 
-	private static final int defaultColor = Color.parseColor("#88A7E3FB");
-	private static final int selectColor = Color.parseColor("#EE6DCFF6");
-	private static final int lineColor = Color.WHITE;
-	private static final int textSize = 32;
+    private static final int mDefaultColor = Color.parseColor("#88A7E3FB");
+    private static final int mSelectColor = Color.parseColor("#EE6DCFF6");
+    private static final int mLineColor = Color.WHITE;
+    private static final int mTextSize = (int) (16 * Utils.getScreenDensity());
+    private static final int mStrokeWidth = 1;
+    private static final int mStrokeAlpha = 76;
 
-	private int totalAngle;
-	private int sectorAngle;
-	private int radius;
-	private int left;
-	private int top;
+    private int mTotalAngle;
+    private int mSectorAngle;
+    private int mRadius;
+    private int mLeft;
+    private int mTop;
+    private int mPosition;
+    private String mText;
 
-	private String text;
-	private int position;
-	private boolean isSelect;
+    private boolean isSelect;
 
-	private Paint paint;
-	private Paint strokePaint;
-	private RectF rectF;
-	private RectF strokeRect;
+    private Paint mPaint;
+    private Paint mStrokePaint;
+    private RectF mRectF;
+    private RectF mStrokeRect;
 
-	public SectorView(Context context, String text, int position, int totalAngle, int childAngle) {
-		super(context);
-		this.text = text;
-		this.position = position;
-		this.totalAngle = totalAngle;
-		this.sectorAngle = childAngle;
-		this.rectF = new RectF();
-		this.strokeRect = new RectF();
+    public SectorView(Context context, String text, int position, int totalAngle, int childAngle) {
+        super(context);
+        this.mText = text;
+        this.mPosition = position;
+        this.mTotalAngle = totalAngle;
+        this.mSectorAngle = childAngle;
+        this.mRectF = new RectF();
+        this.mStrokeRect = new RectF();
 
-		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setStyle(Paint.Style.FILL);
 
-		strokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		strokePaint.setStrokeWidth(1);
-		strokePaint.setColor(lineColor);
-		strokePaint.setAlpha(76);
-		strokePaint.setStyle(Paint.Style.STROKE);
-	}
+        mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mStrokePaint.setStrokeWidth(mStrokeWidth);
+        mStrokePaint.setColor(mLineColor);
+        mStrokePaint.setAlpha(mStrokeAlpha);
+        mStrokePaint.setStyle(Paint.Style.STROKE);
+    }
 
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	}
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		super.onLayout(changed, left, top, right, bottom);
-		this.rectF.left = left;
-		this.rectF.top = top;
-		this.rectF.right = right;
-		this.rectF.bottom = bottom;
-		this.strokeRect.left = left + 1;
-		this.strokeRect.top = top + 1;
-		this.strokeRect.right = right + 1;
-		this.strokeRect.bottom = bottom + 1;
-		this.radius = (right - left) / 2;
-		this.left = left;
-		this.top = top;
-	}
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        this.mRectF.left = left;
+        this.mRectF.top = top;
+        this.mRectF.right = right;
+        this.mRectF.bottom = bottom;
+        this.mStrokeRect.left = left + 1;
+        this.mStrokeRect.top = top + 1;
+        this.mStrokeRect.right = right + 1;
+        this.mStrokeRect.bottom = bottom + 1;
+        this.mRadius = (right - left) / 2;
+        this.mLeft = left;
+        this.mTop = top;
+    }
 
-	public void setIsSelect(boolean isSelect) {
-		this.isSelect = isSelect;
-		invalidate();
-	}
+    public void setIsSelect(boolean isSelect) {
+        this.isSelect = isSelect;
+        invalidate();
+    }
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		drawArc(canvas);
-	}
+    @Override
+    protected void onDraw(Canvas canvas) {
+        drawArc(canvas);
+    }
 
-	private void drawArc(Canvas canvas) {
-		paint.setStyle(Paint.Style.FILL);
-		// 画弧形
-		if (isSelect) {
-			paint.setAlpha(152);
-			paint.setColor(selectColor);
-		} else {
-			paint.setAlpha(127);
-			paint.setColor(defaultColor);
-		}
-		canvas.drawArc(rectF, totalAngle - (position + 1) * sectorAngle, sectorAngle, true, paint);
+    private void drawArc(Canvas canvas) {
+        // 画弧形
+        if (isSelect) {
+            mPaint.setAlpha(152);
+            mPaint.setColor(mSelectColor);
+        } else {
+            mPaint.setAlpha(127);
+            mPaint.setColor(mDefaultColor);
+        }
+        canvas.drawArc(mRectF, mTotalAngle - (mPosition + 1) * mSectorAngle, mSectorAngle, true, mPaint);
 
-		canvas.drawArc(strokeRect, totalAngle - (position + 1) * sectorAngle, sectorAngle, true, strokePaint);
+        canvas.drawArc(mStrokeRect, mTotalAngle - (mPosition + 1) * mSectorAngle, mSectorAngle, true, mStrokePaint);
 
-		// 画文字
-		double textPositionX = getTextPositionX(radius * 5 / 7, position, totalAngle / sectorAngle);
-		double textPositionY = getTextPositionY(radius * 5 / 7, position, totalAngle / sectorAngle);
+        // 画文字
+        double textPositionX = getTextPositionX(mRadius * 5 / 7, mPosition, mTotalAngle / mSectorAngle);
+        double textPositionY = getTextPositionY(mRadius * 5 / 7, mPosition, mTotalAngle / mSectorAngle);
 
-		if (!TextUtils.isEmpty(text)) {
-			// 默认为4个文字，每行2个字
-			if (text.length() == 4) {
-				drawText(canvas, text.substring(0, 2), textPositionX, textPositionY);
-				drawText(canvas, text.substring(2, 4), textPositionX, textPositionY + textSize);
-			}
-			// 其他情况下只显示一行
-			else {
-				drawText(canvas, text, textPositionX, textPositionY);
-			}
-		}
-	}
+        if (!TextUtils.isEmpty(mText)) {
+            drawText(canvas, mText, textPositionX, textPositionY);
+        }
+    }
 
-	private void drawText(Canvas canvas, String text, double textPositionX, double textPositionY) {
-		Rect rect = new Rect();
-		paint.setTextSize(textSize);
-		paint.setColor(Color.BLACK);
-		paint.getTextBounds(text, 0, text.length(), rect);
-		int textWidth = rect.width();
-		int textHeight = rect.height();
-		canvas.drawText(text, (float) textPositionX - textWidth / 2, (float) textPositionY - textHeight / 2, paint);
-	}
+    private void drawText(Canvas canvas, String text, double textPositionX, double textPositionY) {
+        Rect rect = new Rect();
+        mPaint.setTextSize(mTextSize);
+        mPaint.setColor(Color.BLACK);
+        mPaint.getTextBounds(text, 0, text.length(), rect);
+        int textWidth = rect.width();
+        int textHeight = rect.height();
+        canvas.drawText(text, (float) textPositionX - textWidth / 2, (float) textPositionY - textHeight / 2, mPaint);
+    }
 
-	private double getTextPositionX(float radius, int position, int childCount) {
-		return this.left + this.radius + radius * Math.cos(2 * Math.PI - position * 2 * Math.PI / childCount - Math.PI / childCount);
-	}
+    private double getTextPositionX(float radius, int position, int childCount) {
+        return this.mLeft + this.mRadius + radius * Math.cos(2 * Math.PI - position * 2 * Math.PI / childCount - Math.PI / childCount);
+    }
 
-	private double getTextPositionY(float radius, int position, int n) {
-		return this.top + this.radius + radius * Math.sin(2 * Math.PI - position * 2 * Math.PI / n - Math.PI / n);
-	}
+    private double getTextPositionY(float radius, int position, int childCount) {
+        return this.mTop + this.mRadius + radius * Math.sin(2 * Math.PI - position * 2 * Math.PI / childCount - Math.PI / childCount);
+    }
 
 }

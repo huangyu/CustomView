@@ -6,32 +6,29 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.View;
 
-import com.huangyu.customviewlibrary.R;
-
 
 /**
  * Created by huangyu on 2017/4/5.
  */
 public class CenterView extends View {
 
-    private Bitmap backgroundBitmap;
-    public int bitmapWidth;
-    public int bitmapHeight;
+    private Bitmap mBitmap;
+    public int mBitmapWidth;
+    public int mBitmapHeight;
 
     public CenterView(Context context) {
         super(context);
-        setBitmapResourse(R.drawable.btn_tool_nor);
     }
 
     public void setBitmapResourse(int id) {
-        backgroundBitmap = BitmapFactory.decodeResource(getResources(), id);
-        bitmapWidth = backgroundBitmap.getWidth();
-        bitmapHeight = backgroundBitmap.getHeight();
+        mBitmap = BitmapFactory.decodeResource(getResources(), id);
+        mBitmapWidth = mBitmap.getWidth();
+        mBitmapHeight = mBitmap.getHeight();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(bitmapWidth, bitmapHeight);
+        setMeasuredDimension(mBitmapWidth, mBitmapHeight);
     }
 
     @Override
@@ -41,7 +38,7 @@ public class CenterView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(backgroundBitmap, 0, 0, null);
+        canvas.drawBitmap(mBitmap, 0, 0, null);
     }
 
 }

@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 public class CanvasView extends View {
 
     public boolean isClear = false;
-    public Path path = null;
-    public Paint paint = null;
+    public Path mPath = null;
+    public Paint mPaint = null;
 
     private float mX, mY;
     private final RectF mDirtyRect = new RectF();
@@ -29,21 +29,16 @@ public class CanvasView extends View {
 
     private ViewGroup mParentViewGroup;
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-    }
-
     public void init() {
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
-        path = new Path();
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
+        mPath = new Path();
     }
 
     public CanvasView(Context context, AttributeSet attrs) {
@@ -53,18 +48,18 @@ public class CanvasView extends View {
 
     public void clear() {
         isClear = true;
-        path.reset();
+        mPath.reset();
         invalidate();
     }
 
     public void eraser() {
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        paint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeCap(Paint.Cap.SQUARE);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.SQUARE);
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
     }
 
     public void setParentView(ViewGroup viewGroup) {
@@ -73,11 +68,11 @@ public class CanvasView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawPath(path, paint);
+        canvas.drawPath(mPath, mPaint);
     }
 
     private void touchStart(float x, float y, MotionEvent event) {
-        path.moveTo(x, y);
+        mPath.moveTo(x, y);
         resetDirtyRect(x, y);
         mX = x;
         mY = y;
@@ -90,7 +85,7 @@ public class CanvasView extends View {
         for (int i = 0; i < historySize; i++) {
             float historicalX = event.getHistoricalX(i);
             float historicalY = event.getHistoricalY(i);
-            path.quadTo(mX, mY, historicalX, historicalY);
+            mPath.quadTo(mX, mY, historicalX, historicalY);
 
             resetDirtyRect(historicalX, historicalY);
             mX = historicalX;
@@ -99,7 +94,7 @@ public class CanvasView extends View {
             invalidate((int) (mDirtyRect.left - HALF_STROKE_WIDTH), (int) (mDirtyRect.top - HALF_STROKE_WIDTH),
                     (int) (mDirtyRect.right + HALF_STROKE_WIDTH), (int) (mDirtyRect.bottom + HALF_STROKE_WIDTH));
         }
-        path.quadTo(mX, mY, x, y);
+        mPath.quadTo(mX, mY, x, y);
 
         resetDirtyRect(x, y);
         mX = x;
@@ -110,7 +105,7 @@ public class CanvasView extends View {
     }
 
     private void touchUp(float x, float y, MotionEvent event) {
-        path.moveTo(x, y);
+        mPath.moveTo(x, y);
         resetDirtyRect(x, y);
         mX = x;
         mY = y;
