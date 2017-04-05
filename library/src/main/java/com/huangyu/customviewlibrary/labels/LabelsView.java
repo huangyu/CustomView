@@ -41,14 +41,15 @@ public class LabelsView extends ViewGroup {
         this.mContext = context;
     }
 
-    public void setView(List<String> dataList) {
+    public void setView(final List<String> dataList, final OnItemClickListener onItemClickListener) {
         if (dataList == null || dataList.isEmpty()) {
             return;
         }
         removeAllViews();
-        for (String data : dataList) {
+        for (int i = 0; i < dataList.size(); i++) {
+            final int position = i;
             TextView textView = new TextView(mContext);
-            textView.setText(data);
+            textView.setText(dataList.get(i));
             textView.setTextSize(mTextSize);
             textView.setTextColor(mStrokeColor);
             textView.setPadding(15, 15, 15, 15);
@@ -60,6 +61,14 @@ public class LabelsView extends ViewGroup {
                 textView.setBackground(gradientDrawable);
             } else {
                 textView.setBackgroundDrawable(gradientDrawable);
+            }
+            if (onItemClickListener != null) {
+                textView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemClickListener.onItemClick(position, dataList.get(position));
+                    }
+                });
             }
             this.addView(textView);
         }
@@ -167,6 +176,10 @@ public class LabelsView extends ViewGroup {
         } finally {
             a.recycle();
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, String text);
     }
 
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.huangyu.customviewlibrary.labels.LabelsView;
 
@@ -22,6 +23,7 @@ public class LabelsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_labels, container, false);
         LabelsView labelsView = (LabelsView) view.findViewById(R.id.labels_view);
+
         List<String> dataList2 = new ArrayList<>();
         dataList2.add("Android");
         dataList2.add("iOS");
@@ -48,7 +50,13 @@ public class LabelsFragment extends Fragment {
         dataList2.add("Windows");
         dataList2.add("Mac");
         dataList2.add("Linux");
-        labelsView.setView(dataList2);
+
+        labelsView.setView(dataList2, new LabelsView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, String text) {
+                Toast.makeText(getContext(), "click " + text, Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
