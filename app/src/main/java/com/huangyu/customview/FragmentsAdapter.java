@@ -13,12 +13,13 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class FragmentsAdapter extends FragmentPagerAdapter {
 
-    private String mTabTitles[] = new String[]{"Banner", "Canvas", "Labels", "RAndL"};
+    private String mTabTitles[] = new String[]{"Banner", "Canvas", "Labels", "RAndL", "Sector"};
 
     private Fragment bannerFragment;
     private Fragment labelsFragment;
     private Fragment canvasFragment;
     private Fragment refreshAndLoadFragment;
+    private Fragment sectorFragment;
 
     public FragmentsAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -30,6 +31,7 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
         labelsFragment = new LabelsFragment();
         canvasFragment = new CanvasFragment();
         refreshAndLoadFragment = new RefreshAndLoadFragment();
+        sectorFragment = new SectorFragment();
     }
 
     @Override
@@ -43,6 +45,8 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
                 return labelsFragment;
             case 3:
                 return refreshAndLoadFragment;
+            case 4:
+                return sectorFragment;
         }
         return null;
     }
