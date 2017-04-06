@@ -5,8 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -52,16 +50,6 @@ public class CanvasView extends View {
         mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
     }
 
-    public void setEraser() {
-        mPaint.setAntiAlias(true);
-        mPaint.setDither(true);
-        mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.SQUARE);
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-    }
-
     public void setParentView(ViewGroup viewGroup) {
         this.mParentViewGroup = viewGroup;
     }
@@ -71,7 +59,7 @@ public class CanvasView extends View {
         canvas.drawPath(mPath, mPaint);
     }
 
-    private void touchStart(float x, float y, MotionEvent event) {
+    private void touchStart(float x, float y) {
         mPath.moveTo(x, y);
         resetDirtyRect(x, y);
         mX = x;
@@ -104,7 +92,7 @@ public class CanvasView extends View {
                 (int) (mDirtyRect.right + HALF_STROKE_WIDTH), (int) (mDirtyRect.bottom + HALF_STROKE_WIDTH));
     }
 
-    private void touchUp(float x, float y, MotionEvent event) {
+    private void touchUp(float x, float y) {
         mPath.moveTo(x, y);
         resetDirtyRect(x, y);
         mX = x;
@@ -123,7 +111,6 @@ public class CanvasView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getPointerCount() < 2) {
-
             float x = event.getX();
             float y = event.getY();
             switch (event.getAction()) {
@@ -131,13 +118,13 @@ public class CanvasView extends View {
                     if (mParentViewGroup != null) {
                         mParentViewGroup.requestDisallowInterceptTouchEvent(true);
                     }
-                    touchStart(x, y, event);
+                    touchStart(x, y);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     touchMove(x, y, event);
                     break;
                 case MotionEvent.ACTION_UP:
-                    touchUp(x, y, event);
+                    touchUp(x, y);
                     if (mParentViewGroup != null) {
                         mParentViewGroup.requestDisallowInterceptTouchEvent(false);
                     }

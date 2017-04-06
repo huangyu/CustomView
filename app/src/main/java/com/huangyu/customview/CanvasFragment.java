@@ -9,44 +9,74 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.huangyu.customviewlibrary.canvas.CanvasView;
+import com.huangyu.customviewlibrary.canvas.DrawView;
 
 /**
  * Created by huangyu on 2017-3-31.
  */
 public class CanvasFragment extends Fragment {
 
-    private boolean isEraser;
+    private DrawView drawView;
+    private Button btnClear, btnEraser, btnBack, btnForward;
+
+    private boolean isEarser;
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canvas, container, false);
-        final CanvasView canvasView = (CanvasView) view.findViewById(R.id.canvas);
-        canvasView.setParentView(((MainActivity) getActivity()).viewPager);
+        drawView = (DrawView) view.findViewById(R.id.drawview);
+        drawView.setParentView(((MainActivity) getActivity()).viewPager);
 
-        final Button btnClear = (Button) view.findViewById(R.id.btn_clear);
+        btnClear = (Button) view.findViewById(R.id.btn_clear);
         btnClear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                canvasView.clear();
+                drawView.clear();
+
+                isEarser = false;
+                btnEraser.setText("earser");
+                drawView.setPaint();
             }
         });
-        final Button btnEraser = (Button) view.findViewById(R.id.btn_eraser);
+
+        btnEraser = (Button) view.findViewById(R.id.btn_eraser);
         btnEraser.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isEraser) {
-                    canvasView.setPaint();
-                    btnEraser.setText("eraser");
+                if (isEarser) {
+                    btnEraser.setText("earser");
+                    drawView.setPaint();
                 } else {
-                    canvasView.setEraser();
                     btnEraser.setText("paint");
+                    drawView.setEraser();
                 }
-                isEraser = !isEraser;
+                isEarser = !isEarser;
+            }
+        });
+
+        btnBack = (Button) view.findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawView.goBack();
+            }
+        });
+
+        btnForward = (Button) view.findViewById(R.id.btn_forward);
+        btnForward.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawView.goForward();
             }
         });
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        drawView.clearBitmap();
+        super.onDestroy();
     }
 
 }

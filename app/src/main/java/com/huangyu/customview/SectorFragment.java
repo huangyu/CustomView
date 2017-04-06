@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.huangyu.customviewlibrary.sector_menu_view.SectorMenuView;
+import com.huangyu.customviewlibrary.sectormenu.SectorMenuView;
 
 /**
  * Created by huangyu on 2017-3-31.

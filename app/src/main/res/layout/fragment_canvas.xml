@@ -11,10 +11,10 @@
         android:layout_weight="1"
         android:background="@drawable/canvas_border">
 
-        <com.huangyu.customviewlibrary.canvas.CanvasView
-            android:id="@+id/canvas"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <com.huangyu.customviewlibrary.canvas.DrawView
+            android:id="@+id/drawview"
+            android:layout_width="300dp"
+            android:layout_height="500dp"
             android:background="@android:color/white" />
 
     </LinearLayout>
@@ -35,6 +35,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="eraser" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back" />
+
+        <Button
+            android:id="@+id/btn_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="forward" />
 
     </LinearLayout>
 </LinearLayout>

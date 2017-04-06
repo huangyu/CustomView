@@ -1,4 +1,4 @@
-package com.huangyu.customviewlibrary.sector_menu_view;
+package com.huangyu.customviewlibrary.sectormenu;
 
 import android.content.Context;
 import android.graphics.Bitmap;
