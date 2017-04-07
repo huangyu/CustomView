@@ -50,7 +50,7 @@ public class SectorMenuView extends FrameLayout {
 
     public void init(final Context context, String[] textArray) {
         mCenterView = new CenterView(context);
-        mCenterView.setBitmapResourse(mBackgroundRes);
+        mCenterView.setBitmapResource(mBackgroundRes);
         addView(mCenterView);
 
         this.mTextArray = textArray;
@@ -89,7 +89,7 @@ public class SectorMenuView extends FrameLayout {
             @Override
             public void onAnimationStart(Animation animation) {
                 if (!isOpen) {
-                    mCenterView.setBitmapResourse(R.drawable.btn_tool_hover);
+                    mCenterView.setBitmapResource(R.drawable.btn_tool_hover);
                     mCenterView.invalidate();
                 }
                 startSectorAnim();
@@ -98,7 +98,7 @@ public class SectorMenuView extends FrameLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (isOpen) {
-                    mCenterView.setBitmapResourse(R.drawable.btn_tool_nor);
+                    mCenterView.setBitmapResource(R.drawable.btn_tool_nor);
                     mCenterView.invalidate();
                 }
             }

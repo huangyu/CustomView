@@ -20,70 +20,34 @@ import java.util.List;
 public class DrawFreeCurve {
 
     private int color;
-    private int alpha;
     private float paintSize;
     private Boolean isEraser;
-    private Paint paint;
     protected List<PointF> points;
 
     protected DrawFreeCurve() {
         color = Color.BLACK;
-        alpha = 1;
         paintSize = 10;
         points = new ArrayList<>();
-        paint = new Paint();
         isEraser = false;
-    }
-
-    public int getColor() {
-        return color;
     }
 
     public void setColor(int color) {
         this.color = color;
     }
 
-    public int getAlpha() {
-        return alpha;
-    }
-
-    public void setAlpha(int alpha) {
-        this.alpha = alpha;
-    }
-
-    public float getPaintSize() {
-        return paintSize;
-    }
-
-    public void setPaintSize(float paintSize) {
-        this.paintSize = paintSize;
-    }
-
-    public Boolean getIsEraser() {
-        return isEraser;
-    }
-
     public void setIsEraser(Boolean isEraser) {
         this.isEraser = isEraser;
     }
 
-    public Paint getPaint() {
-        return paint;
-    }
-
     public void setPaint(Paint paint) {
-        this.paint = paint;
-        this.paint = paint;
         this.paintSize = paint.getStrokeWidth();
         this.color = paint.getColor();
-        this.alpha = paint.getAlpha();
     }
 
-    public void drawObj(Canvas canvas) {
+    public void drawObject(Canvas canvas) {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
-        paint.setAlpha(alpha);
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
@@ -101,7 +65,6 @@ public class DrawFreeCurve {
             path.quadTo(x, y, points.get(i).x, points.get(i).y);
             x = points.get(i).x;
             y = points.get(i).y;
-
         }
         canvas.drawPath(path, paint);
     }
@@ -109,7 +72,6 @@ public class DrawFreeCurve {
     public void load(DataInputStream in) {
         try {
             color = in.readInt();
-            alpha = in.readInt();
             paintSize = in.readFloat();
             isEraser = in.readBoolean();
             int pointCount = in.readInt();
@@ -129,7 +91,6 @@ public class DrawFreeCurve {
         int i;
         try {
             out.writeInt(color);
-            out.writeInt(alpha);
             out.writeFloat(paintSize);
             out.writeBoolean(isEraser);
             out.writeInt(points.size());

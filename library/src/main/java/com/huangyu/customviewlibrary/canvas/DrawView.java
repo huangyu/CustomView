@@ -53,10 +53,10 @@ public class DrawView extends View {
     private Bitmap mEraserBitmap;
 
     private Boolean isEraser = false;
-    private Boolean mTouchUP = false;
+    private Boolean isTouchUp = false;
 
     private int mPaintSize = 5;
-    private int mEraserSize = 50;
+    private int mEraserSize = 30;
     private int paintColor;
 
     private float mLastTouchX = 0;
@@ -67,18 +67,18 @@ public class DrawView extends View {
 
     public DrawView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setViewWH(attrs);
-        setPaintBitmap();
-        setEraserBitmap();
-
         mElementList = new ArrayList<>();
         mDelElements = new ArrayList<>();
-        mPaint = new Paint();
         mPath = new Path();
+        mPaint = new Paint();
         mCirclePaint = new Paint();
         mDirtyRect = new RectF();
 
+        setViewWH(attrs);
+        setPaintBitmap();
+        setEraserBitmap();
         setPaint();
+        setPaintColor(Color.BLACK);
     }
 
     public void setParentView(ViewGroup viewGroup) {
@@ -106,7 +106,7 @@ public class DrawView extends View {
             screenWidth = (int) (Utils.getScreenDensity() * (Integer.parseInt(width.split("\\.")[0])));
             screenHeight = (int) (Utils.getScreenDensity() * (Integer.parseInt(height.split("\\.")[0])));
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         VIEW_W = screenWidth;
@@ -233,7 +233,7 @@ public class DrawView extends View {
     private void setDrawBitmap() {
         if (mElementList != null && mElementList.size() > 0) {
             for (int i = 0; i < mElementList.size(); i++) {
-                mElementList.get(i).drawObj(mPaintCanvas);
+                mElementList.get(i).drawObject(mPaintCanvas);
             }
         }
     }
@@ -243,7 +243,7 @@ public class DrawView extends View {
         if (isEraser) {
             mPaintCanvas.drawPath(mPath, mPaint);
             canvas.drawBitmap(mPaintBitmap, 0, 0, null);
-            if (mTouchUP) {
+            if (isTouchUp) {
                 clearEraserCanvas();
             } else {
                 drawEraserCircle(mLastTouchX, mLastTouchY);
@@ -276,7 +276,7 @@ public class DrawView extends View {
         mElementList.add(mDrawFreeCurve);
         mLastTouchX = x;
         mLastTouchY = y;
-        mTouchUP = false;
+        isTouchUp = false;
         resetDirtyRect(x, y);
 
         mPath = new Path();
@@ -329,7 +329,7 @@ public class DrawView extends View {
         resetDirtyRect(x, y);
         mPath.quadTo(mLastTouchX, mLastTouchY, x, y);
         if (isEraser) {
-            mTouchUP = true;
+            isTouchUp = true;
             setDrawBitmap();
         }
         setDrawBitmap();

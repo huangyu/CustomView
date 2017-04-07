@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -37,6 +39,11 @@ public class CanvasView extends View {
         isClear = true;
         mPath.reset();
         invalidate();
+    }
+
+    public void setEarser() {
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
     }
 
     public void setPaint() {

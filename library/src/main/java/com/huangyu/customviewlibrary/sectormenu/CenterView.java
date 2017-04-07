@@ -20,7 +20,7 @@ public class CenterView extends View {
         super(context);
     }
 
-    public void setBitmapResourse(int id) {
+    public void setBitmapResource(int id) {
         mBitmap = BitmapFactory.decodeResource(getResources(), id);
         mBitmapWidth = mBitmap.getWidth();
         mBitmapHeight = mBitmap.getHeight();
