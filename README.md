@@ -4,4 +4,5 @@
 + **CanvasView/DrawView 画布**
 + **RefreshAndLoadView 下滑加载上拉刷新**
 + **SectorMenuView 扇形菜单**
++ **RoundedImageView 圆形图片控件**
 

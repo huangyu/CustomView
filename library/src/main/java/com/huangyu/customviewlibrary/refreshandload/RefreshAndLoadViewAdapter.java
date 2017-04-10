@@ -3,6 +3,7 @@ package com.huangyu.customviewlibrary.refreshandload;
 import android.widget.TextView;
 
 import com.huangyu.customviewlibrary.R;
+import com.huangyu.customviewlibrary.roundimage.RoundedImageView;
 
 /**
  * Created by huangyu on 2017-3-27.
@@ -16,8 +17,10 @@ public class RefreshAndLoadViewAdapter extends CommonRecyclerAdapter<String> {
     @Override
     public void convert(CommonRecyclerViewHolder holder, String data, int position) {
         int itemType = getItemViewType(position);
-        if(itemType == TYPE_HEADER || itemType == TYPE_NORMAL) {
+        if (itemType == TYPE_HEADER || itemType == TYPE_NORMAL) {
             ((TextView) holder.getView(R.id.tv_title)).setText(data);
+            RoundedImageView rivAvatar = holder.getView(R.id.riv_avatar);
+            rivAvatar.setBackgroundResource(R.mipmap.ic_launcher);
         }
     }
 
