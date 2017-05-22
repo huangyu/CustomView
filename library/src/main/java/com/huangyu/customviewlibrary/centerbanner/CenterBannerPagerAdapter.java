@@ -1,22 +1,24 @@
-package com.huangyu.customviewlibrary.banner;
+package com.huangyu.customviewlibrary.centerbanner;
 
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.huangyu.customviewlibrary.banner.BannerViewCreator;
+
 import java.util.List;
 
 /**
- * Created by huangyu on 2017-3-23.
+ * Created by huangyu on 2017-5-22.
  */
-class BannerPagerAdapter<T> extends PagerAdapter {
+public class CenterBannerPagerAdapter<T> extends PagerAdapter {
 
     private List<T> mDataList;
-    private SparseArray<View> mViews; // mViews.size() = mDataList.size() + 2
+    private SparseArray<View> mViews;
     private BannerViewCreator<T> mCreater;
 
-    BannerPagerAdapter(List<T> dataList, BannerViewCreator<T> creator) {
+    public CenterBannerPagerAdapter(List<T> dataList, BannerViewCreator<T> creator) {
         this.mDataList = dataList;
         this.mViews = new SparseArray<>();
         this.mCreater = creator;
@@ -24,7 +26,7 @@ class BannerPagerAdapter<T> extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mDataList == null ? 0 : mDataList.size() + 2;
+        return mDataList == null ? 0 : mDataList.size();
     }
 
     @Override
@@ -33,7 +35,7 @@ class BannerPagerAdapter<T> extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         View view = mViews.get(position);
 
         if (view == null) {
@@ -41,7 +43,7 @@ class BannerPagerAdapter<T> extends PagerAdapter {
             mViews.put(position, view);
         }
 
-        T data = mDataList.get(getRealPosition(position));
+        T data = mDataList.get(position);
 
         mCreater.loadData(data, position, view);
 
@@ -52,24 +54,6 @@ class BannerPagerAdapter<T> extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView(mViews.get(position));
-    }
-
-    /**
-     * 此处用于获取真实的序号，如下对应所示：
-     * a,b,c,e,f  mViews
-     * 2,0,1,2,0  mDataList
-     *
-     * @param position
-     * @return
-     */
-    private int getRealPosition(int position) {
-        if (position == 0) {
-            return mDataList.size() - 1;
-        } else if (position == getCount() - 1) {
-            return 0;
-        } else {
-            return position - 1;
-        }
     }
 
 }

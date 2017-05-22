@@ -5,6 +5,11 @@
         <attr name="scrollDuration" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="CenterBannerView">
+        <attr name="viewWidth" format="integer" />
+        <attr name="viewHeight" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="LabelsView">
         <attr name="childMargin" format="integer" />
         <attr name="lineMargin" format="integer" />

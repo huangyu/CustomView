@@ -154,12 +154,12 @@ public class BannerView<T> extends FrameLayout {
     private void initIndicator() {
         if (mAdapter != null) {
             initIndicatorDrawable();
-            initIndicaterLayout();
+            initIndicatorLayout();
             initIndicatorLayoutContent();
         }
     }
 
-    private void initIndicaterLayout() {
+    private void initIndicatorLayout() {
         mIndicatorLayout = new LinearLayout(getContext());
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
@@ -220,7 +220,7 @@ public class BannerView<T> extends FrameLayout {
         }
     }
 
-    private void startLoop() {
+    public void startLoop() {
         stopLoop();
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -238,7 +238,7 @@ public class BannerView<T> extends FrameLayout {
         timer.schedule(timerTask, mIntervalTime, mIntervalTime);
     }
 
-    private void stopLoop() {
+    public void stopLoop() {
         if (timerTask != null) {
             timerTask.cancel();
         }

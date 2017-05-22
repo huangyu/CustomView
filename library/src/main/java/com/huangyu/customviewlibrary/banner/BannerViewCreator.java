@@ -7,6 +7,6 @@ import android.view.View;
  */
 
 public interface BannerViewCreator<T> {
-    View createView();
+    View createView(int position);
     void loadData(T data, int position, View view);
 }

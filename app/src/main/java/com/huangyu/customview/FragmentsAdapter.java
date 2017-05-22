@@ -13,9 +13,10 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class FragmentsAdapter extends FragmentPagerAdapter {
 
-    private String mTabTitles[] = new String[]{"Banner", "Canvas", "Labels", "RefreshLoad", "Sector"};
+    private String mTabTitles[] = new String[]{"1", "2", "3", "4", "5", "6"};
 
     private Fragment bannerFragment;
+    private Fragment centerBannerFragment;
     private Fragment labelsFragment;
     private Fragment canvasFragment;
     private Fragment refreshAndLoadFragment;
@@ -28,6 +29,7 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
 
     private void initFragments() {
         bannerFragment = new BannerFragment();
+        centerBannerFragment = new CenterBannerFragment();
         labelsFragment = new LabelsFragment();
         canvasFragment = new CanvasFragment();
         refreshAndLoadFragment = new RefreshAndLoadFragment();
@@ -40,12 +42,14 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
             case 0:
                 return bannerFragment;
             case 1:
-                return canvasFragment;
+                return centerBannerFragment;
             case 2:
-                return labelsFragment;
+                return canvasFragment;
             case 3:
-                return refreshAndLoadFragment;
+                return labelsFragment;
             case 4:
+                return refreshAndLoadFragment;
+            case 5:
                 return sectorFragment;
         }
         return null;

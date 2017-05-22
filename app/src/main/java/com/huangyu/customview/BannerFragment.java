@@ -20,9 +20,11 @@ import java.util.List;
  */
 public class BannerFragment extends Fragment {
 
+    private BannerView<String> mBannerView;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_banner, container, false);
         List<String> dataList = new ArrayList<>();
         dataList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490263950073&di=c245e6da88195cd1df4b414edab5dcde&imgtype=0&src=http%3A%2F%2Fimg.sootuu.com%2Fvector%2F2007-07-01%2F066%2F1%2F664.gif");
@@ -30,20 +32,34 @@ public class BannerFragment extends Fragment {
         dataList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490263897676&di=20d6f9a3c5e82190259c5e53bacf290c&imgtype=0&src=http%3A%2F%2Fimg.sootuu.com%2Fvector%2F200801%2F097%2F656.jpg");
         dataList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490263901894&di=2da0e48167e07e093d04ff840dcde11a&imgtype=0&src=http%3A%2F%2Fimg.sootuu.com%2Fvector%2F200801%2F097%2F657.jpg");
         dataList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490263960022&di=303777ced56f439c568073b05da064a6&imgtype=0&src=http%3A%2F%2Fimg.sootuu.com%2Fvector%2F200801%2F097%2F658.jpg");
-        BannerView<String> bannerView = (BannerView<String>) view.findViewById(R.id.banner_view);
-        bannerView.setView(dataList, new BannerViewCreator<String>() {
+
+        mBannerView = (BannerView<String>) view.findViewById(R.id.banner_view);
+        mBannerView.setView(dataList, new BannerViewCreator<String>() {
             @Override
-            public View createView() {
-                ImageView imageView = new ImageView(getActivity());
-                return imageView;
+            public View createView(int position) {
+                return new ImageView(getContext());
             }
 
             @Override
             public void loadData(String data, int position, View view) {
-                Glide.with(getActivity()).load(data).into((ImageView) view);
+                Glide.with(getContext()).load(data).into((ImageView) view);
             }
         });
+
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (mBannerView == null) {
+            return;
+        }
+        if (getUserVisibleHint()) {
+            mBannerView.startLoop();
+        } else {
+            mBannerView.stopLoop();
+        }
     }
 
 }

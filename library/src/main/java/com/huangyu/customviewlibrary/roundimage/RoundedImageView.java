@@ -31,7 +31,7 @@ public class RoundedImageView extends ImageView {
     /**
      * 矩形图形圆角半径
      */
-    private float mRectRadius = 10;
+    private float mRectRadius = 20;
     private final RectF mRoundRect = new RectF();
     private final Paint mMaskPaint = new Paint();
     private final Paint mZonePaint = new Paint();
